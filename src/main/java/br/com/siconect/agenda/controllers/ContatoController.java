@@ -8,7 +8,7 @@ import br.com.siconect.agenda.models.Contato;
 @Controller
 public class ContatoController {
   
-  @Get
+  @Get("contato/novo")
   public void form(){}
   
   @Post

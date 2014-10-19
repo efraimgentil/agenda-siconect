@@ -95,6 +95,16 @@ public class HelloController{
 
 Mais uma vez por convensão todos os meotods publicos do controller são considerados rotas, logo se meu controller response a /hello meu metodo responde a /index logo tempos /hello/index 
 
+### JSP's
+
+Ao executar o controller acima, o metodo sera executado ( caso a rota esteja correta ) porem no browser é retornado o erro 404, pois não foi encontrada a JSP do metodo executado, mais uma vez o VRaptor possui convensções para isso, cada metodo publico do controller deve possuir sua respectiva jsp (caso o mesmo deva responder como jsp) 
+e todo controler deve possuir sua pasta raiz de jsps, por convensão o essa pasta deve ficar localizada dentro do de "WEB-INF/jsp", logo se eu possui o controller HelloController, devo criar a pasta "WEB-INF/jsp/hello", como meu controller possui o metodo index devo criar a jsp "index.jsp", por fim tempos "WEB-INF/jsp/hello/index.jsp", lembrando, a minha JSP DEVE ter o mesmo nome do metodo a qual responde!
+
+Pode parecer confuso, então para recaptular
+-Pasta default para as jsps: "WEB-INF/jsp"
+-Todo controller tem uma pasta na pasta defaul: "WEB-INF/jsp/{nomeDoController}" (seguindo as convenções a palavra controller não é adicionada no nome da pasta)
+-Para todo metodo public que deve responder jsp deve ser criada uma jsp com o mesmo nome do metodo!
+
 ### Recebendo parametros no controller
 
 Para receber um parametro em um metodo do controller, basta especificar tipo do parametro e o nome do parametro veja:
@@ -162,6 +172,8 @@ formulário e preencher o objeto, importante observar que, no formulario deve se
 logo se eu tenho o parametro "contato" e quero preencher o atributo nome dentro dele devo ter enviar um parametro no formulario com o name "contato.nome". 
 Se no meu controller eu o nome do parametro do metodo fosse "con", no meu formulario eu teria "con.nome", sim o nome do parametro do metodo no controller é importante!
 
+Você pode notar também o objeto "linkTo" sendo usado para refernciar um controller, esse objeto é um helper injetado pelo vraptor e todas as paginas jsp, atraves dele você pode referenciar de forma facil as rotas do controller atraves dos metodos do mesmo.
+
 ### Regras de navegação
 
 Veja que no exemplo acima meu metodo create responde tanto a uma requisição POST como uma requisição GET "contato/create?contato.nome=Efraim&contato.telefone=99009900&contato.celular=00990099" também chama o metodo create, isso muitas vezes não é o desejado, se vamos tratar um formulário não é interessante que os parametros do meu formulário saiam na url da pagina, é interessate que o metodo create responda apenas para requisições POST, o vraptor no permite isso de forma bem simples, basta anotar o metodo com a anottação @Post
@@ -175,11 +187,17 @@ public void create(Contato contato){
 Seguindo essa logica, o VRaptor também nos fornece a anotação @Get, assim podemos anotar nosso meotod "form" para responder apenas a requisições GET
 ```java
 @Get
-public void create(Contato contato){
-	//Cadastra contato
-	System.out.println(contato);
+public void form(){
 }
 ```
+O VRaptor também nos fornece duas outras anotações @Put e @Delete, essas que servem para que possamos criar uma aplicação seguindo a arquitetura REST, porem não iremos abordar seu uso nesse projeto.
+Usando essas anotações nos podemos alterar também a rota caso não queiramos usar o nome do metodo para a arota, basta adicionar no corpo da anotação o caminho desejano, mas é necessário informar o caminho completo.
+```java
+@Get("contato/novo")
+public void form(){
+}
+```
+Importante lembrar que essa alteração não altera a convensão de localização da pagina jsp, altera apenas a rota logica do controller
 
 
 

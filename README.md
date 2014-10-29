@@ -199,8 +199,31 @@ public void form(){
 ```
 Importante lembrar que essa alteração não altera a convensão de localização da pagina jsp, altera apenas a rota logica do controller
 
+### Redirect e Forward
 
+Muitas vezes precisamos que uma determinada URI aponte para outro metodo (forward) ou redirecione para outra URI (redirect), isso também pode ser atingido de forma simples com o VRaptor, veja o exemplo
 
+```java
+@Get("contato/")
+public void index(Result result){
+	result.forwardTo(this).form()
+}
+@Get("contato/novo")
+public void form(){
+}
+```
+
+Da mesma maneira é possivel fazer o redirect vjea:
+```java
+@Get("contato/redirect")
+public void redirect(Result result){
+	result.redirectTo(this).form()
+}
+@Get("contato/novo")
+public void form(){
+}
+```
+Veja que uma das grandes diferenças é que o forward não altera a URI da pagina, já o redirect altera
 
 
 

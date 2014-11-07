@@ -1,10 +1,16 @@
 package br.com.siconect.agenda.models;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Contato {
   
   private Integer id;
+  @NotEmpty
   private String nome;
+  
+  @NotEmpty
   private String telefone;
+  
   private String celular;
   
   @Override

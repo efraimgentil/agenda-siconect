@@ -7,11 +7,28 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Agenda</title>
+<style>
+	.error{
+		color: red;
+	}
+</style>
 </head>
 <body>
-	Agenda online, contatos da galera do siconect \o/
 	
+	<h1>Agenda online, contatos da galera do siconect \o/</h1>
 	
+	<form id="formBusca" action="${linkTo[ContatoController].buscar()}" method="get">
+		<div>
+			<span class="error">${errors.from('nome')}</span>
+		</div>
+		<div>
+			<label for="nome">Nome</label>
+			<input id="nome" name="nome" value="${nome}" />
+			<button type="submit">Buscar</button>
+		</div>
+		
+	</form>
+		
 	<a href="${linkTo[ContatoController].form()}">Novo</a>
 	
 	<table>
@@ -25,6 +42,11 @@
 			</tr>
 		</thead>
 		<tbody>
+			<c:if test="${empty contatos}">
+				<tr>
+					<td colspan="5" class="error">Nenhum registro encontrado</td>
+				</tr>
+			</c:if>
 			<c:forEach items="${contatos}" var="contato">
 				<tr>
 					<td>${contato.nome}</td>
@@ -33,7 +55,7 @@
 					<td></td>
 					<td>
 						<a href="${linkTo[ContatoController].editar(contato.id)}">Editar</a>
-						<a href="#">Remover</a>
+						<a href="${linkTo[ContatoController].remover(contato)}" onclick="return confirm('Tem certeza?')" >Remover</a>
 					</td>
 				</tr>
 			</c:forEach>

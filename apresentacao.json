@@ -1,0 +1,13 @@
+"apresentacao" : {
+	"o_que_e" : "É um framework MVC java, criado pela empresa caelumn, é um projeto opensource, e implementado 
+	em cima da especificação do CDI",
+	"MVC" : "Model View Controller,  é um modelo de arquitetura, onde você divide a aplicação em camadas,
+	   o Model que é toda a camada de negocio da aplicação, dados , entidades, ou seja todo o negócio,
+	   a View que é tudo que é apresentado para o usuário, e o Controller que faz a mediação entre View e Model e vice verça",
+	"CDI" : "CDI é uma especificação java, é o famoso IoC  - Inversion of Control, CDI quer dizer Context Dependency Injection
+	   é o que ele faz ?  é o IoC ná pratica ele faz o controlle de injeção de dependencias, gerenciamento do ciclo de vida dos objetos etc,
+	   não entraremos muito a jundo no assunto, pra não encher vocês de conceitos, é mais pra deixar vocês a par do que diabo é isso né",
+	"Caelum" : "É uma das empresas mais respeitadas de treinamentos, no Brasil, ela é a principal colaboradora no desenvolvimento 
+	do VRaptor, mas o VRaptor é um projeto opensource, então qualquer um pode participar do projeto"    
+	    
+}

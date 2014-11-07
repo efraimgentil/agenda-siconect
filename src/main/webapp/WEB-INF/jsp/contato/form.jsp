@@ -20,6 +20,10 @@
 		</c:otherwise>
 	</c:choose>
 	
+	<c:forEach var="error" items="${errors}">
+	    ${error.category} - ${error.message}<br />
+	</c:forEach>
+	
 	<form action="${action}" method="POST" >
 		<div>
 			<label>Nome</label>

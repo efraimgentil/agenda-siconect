@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.validator.SimpleMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.siconect.agenda.models.Contato;
 
@@ -17,9 +19,10 @@ import br.com.siconect.agenda.models.Contato;
 public class ContatoController {
   
   private static List<Contato> contatos = new ArrayList<Contato>();
-  private AtomicInteger ids = new AtomicInteger(0);
+  private static AtomicInteger ids = new AtomicInteger(0);
   @Inject
   private Result result;
+  @Inject Validator validator;
   
   @Get("contato/")
   public void index(Result result){
@@ -34,6 +37,20 @@ public class ContatoController {
   @Get("/")
   public void contatos(){
     result.include("contatos" , contatos );
+  }
+  
+  @Get("/buscar")
+  public void buscar(String nome , Validator validator){
+    validator.addIf( nome == null || "".equals(nome.trim()) , new SimpleMessage("nome", "Nome é de preenchimento obrigatório") );
+    validator.onErrorUsePageOf(this).contatos();
+    List<Contato> contatosFiltrados = new ArrayList<Contato>();
+    for (Contato contato : contatos) {
+      if(contato.getNome().startsWith( nome ) )
+        contatosFiltrados.add(contato);
+    }
+    result.include(nome);
+    result.include("contatos" , contatosFiltrados );
+    result.of(this).contatos();
   }
   
   @Get("/novo")
@@ -61,12 +78,19 @@ public class ContatoController {
   }
   
   @Post("/novo")
-  public void criar(Contato contato , Validator validator){
+  public void criar(@Valid Contato contato, Validator validator ){
     validator.onErrorForwardTo(this).form();
     contato.setId( ids.incrementAndGet() );
     contatos.add(contato);
     result.include("msg", "Contato cadastrado com sucesso");
     result.redirectTo(this).contatos();
   }
- 
+  
+  @Get("/remover/{contato.id}")
+  public void remover(Contato contato){
+    contatos.remove( contatos.indexOf(contato) );
+    result.include("msg", "Contato removido com sucesso");
+    result.redirectTo(this).contatos();
+  }
+  
 }

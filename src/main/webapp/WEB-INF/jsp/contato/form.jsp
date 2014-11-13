@@ -8,8 +8,8 @@
 <title>Agenda</title>
 </head>
 <body>
-	Agenda online, contatos da galera do siconect \o/
-	
+
+	<h1>Agenda - SICONECT</h1>
 	
 	<c:choose>
 		<c:when test="${contato != null and contato.id != null}">
@@ -20,26 +20,21 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<c:forEach var="error" items="${errors}">
-	    ${error.category} - ${error.message}<br />
-	</c:forEach>
-	
 	<form action="${action}" method="POST" >
 		<div>
 			<label>Nome</label>
 			<input type="text" name="contato.nome" value="${contato.nome}" />
+			${errors.from('contato.nome')}
 		</div>
 		<div>
 			<label>Telefone</label>
 			<input type="text" name="contato.telefone" value="${contato.telefone}" />
-		</div>
-		<div>
-			<label>Celular</label>
-			<input type="text" name="contato.celular" value="${contato.celular}" />
+			${errors.from('contato.telefone')}
 		</div>
 		<div>
 			<label>E-Mail</label>
-			<input type="text" name="contato.email" value="${contato.celular}" />
+			<input type="text" name="contato.email" value="${contato.email}" />
+			${errors.from('contato.email')}
 		</div>
 		<button type="submit"  >Cadastrar</button>
 		<a href="${linkTo[ContatoController].contatos()}">Voltar</a>

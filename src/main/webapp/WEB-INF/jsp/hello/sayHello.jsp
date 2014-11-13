@@ -7,8 +7,8 @@
 <title>Agenda</title>
 </head>
 <body>
-	Hello World
-	
-	
+	Say Hello:
+	<br/>
+	<p>${hello}</p>
 </body>
 </html>

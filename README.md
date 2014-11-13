@@ -5,9 +5,7 @@ Projeto introdutório ao uso do framework VRaptor 4. Porjeto usado no workshop m
 
 ## VRaptor
 
-VRaptor é um java para framework web, criado em 2003 no IME-USP, hoje atualizado e mantido principalmente pela Caelum, porem é um framework de codigo aberto e qualquer um pode contribuir.
-
-Surgiu com a ideia de facilitar o desenvolvimento de java para web, onde na epoca os frameworks do mercado eram "coisas" como Struts e JSF
+VRaptor é um java para framework web, criado em 2003 no IME-USP, hoje atualizado e mantido principalmente pela Caelum, porem é um framework de código aberto e qualquer um pode contribuir.
  
 Algumas caracteristicas
 - Alta produtividade
@@ -17,33 +15,40 @@ Algumas caracteristicas
 - Baixa curva de aprendizado
 - Convenções sobre Configurações 
 
-## Criando um projeto
+## Configurando Projeto
 
-### Maven
-Projeto utiliza o maven para gerenciar suas dependencias, para aqueles que não conhecem o maven ainda, o maven é uma ferramenta de gerenciamento do projeto
-onde é possivel controlar as dependencias, tarefas de build e destribuição do projeto. Para saber mais: http://maven.apache.org/
+Baixe atravez do botão de download ou clone o projeto
 
-As versões mais novas do eclipse já vem com o plugin do maven instalado, mas caso no seu eclipse não possua basta instalar atraves do market place 
+### Com maven
 
-No arquivo pom.xml você encontrara todas as dependencias necessárias para rodar o projeto
+Todos os eclipse mais atuais já vem com o plugin do maven instalado, então basta importar o projeto File > Import > Existing Maven Project, e o maven ira baixar todas suas dependencias e preparar o projeto para você. As configuração das dependencias necessárias ficam no arquivo pom.xml
 
 ### Sem maven
-Caso não esteja usando maven pode baixar o arquivo zip com as bibliotecas necessárias
 
-//TODO lib.zip 
- 
-## Configurando
 
-Usando o tomcat, é necessário configurar o listener do WELD, no arquivo WEB-INF\web.xml é necessário colocar as seguintes linhas
+
+## Configurando Aplicação
+
+### web.xml
+
+Para habilitar o contexto do CDI no tomcat é necessário adicionar o listener do weld, para isso basta fazer como no xml abaixo
 
 ```xml
-<listener>
-	<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
-</listener>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<listener>
+		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+	</listener>
+
+</web-app>
 ```
 
-Dentro da pasta WEB-INF, também é necessário criar o arquivo beans.xml, que abilitara o CDI
-esse necessaŕio, pois o VRaptor4 foi criado em cima da especificação do CDI
+### beans.xml
+
+Para que o CDI funcione corretamente também é necessário o arquivo beans.xml, presente dentro da pasta WEB-INF ou na pasta META-INF no classpath, o corpo do arquivo pode ficar vazio como no exemplo abaixo, mas a presença do arquivo é obrigatória para que o CDI funcione.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -53,7 +58,23 @@ esse necessaŕio, pois o VRaptor4 foi criado em cima da especificação do CDI
 	version="1.1" bean-discovery-mode="all">
 </beans>
 ```
-Com isso já é possivel rodar o projeto no Tomcat7 sem problemas, porem você ainda não possui nenhum controller criado.
+
+### validation.xml
+
+No caso de usar o Beans Validation junto com o vraptor, também se faz necessário a inclusão do arquivo validation.xml na pasta META-INF no classpath, para sinalizar o CDI que não deve validar os metodos automaticamente, e deixar que o vraptor se responsabilize por essa validação, para isso basta configurar como o validation.xml abaixo
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-config xmlns="http://jboss.org/xml/ns/javax/validation/configuration"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/configuration
+        validation-configuration-1.1.xsd"
+        version="1.1">
+    <executable-validation enabled="false"/>
+</validation-config>
+```
+
+Com isso temos o projeto configurado e pronto para rodar.
 
 ## Primeiro Controller 
 
@@ -98,7 +119,7 @@ Mais uma vez por convensão todos os meotods publicos do controller são conside
 ### JSP's
 
 Ao executar o controller acima, o metodo sera executado ( caso a rota esteja correta ) porem no browser é retornado o erro 404, pois não foi encontrada a JSP do metodo executado, mais uma vez o VRaptor possui convensções para isso, cada metodo publico do controller deve possuir sua respectiva jsp (caso o mesmo deva responder como jsp) 
-e todo controler deve possuir sua pasta raiz de jsps, por convensão o essa pasta deve ficar localizada dentro do de "WEB-INF/jsp", logo se eu possui o controller HelloController, devo criar a pasta "WEB-INF/jsp/hello", como meu controller possui o metodo index devo criar a jsp "index.jsp", por fim tempos "WEB-INF/jsp/hello/index.jsp", lembrando, a minha JSP DEVE ter o mesmo nome do metodo a qual responde!
+e todo controler deve possuir sua pasta raiz de jsps, por convensão o essa pasta deve ficar localizada dentro do de "WEB-INF/jsp", logo se eu possui o controller HelloController, devo criar a pasta "WEB-INF/jsp/hello", como meu controller possui o metodo index devo criar a jsp "index.jsp", por fim temos "WEB-INF/jsp/hello/index.jsp", lembrando, a minha JSP DEVE ter o mesmo nome do metodo a qual responde!
 
 Pode parecer confuso, então para recaptular
 -Pasta default para as jsps: "WEB-INF/jsp"

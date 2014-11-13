@@ -7,8 +7,6 @@
 <title>Agenda</title>
 </head>
 <body>
-	Hello
-	
-	
+	Hello World
 </body>
 </html>

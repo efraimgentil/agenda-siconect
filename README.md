@@ -202,7 +202,6 @@ Veja que no exemplo acima meu metodo create responde tanto a uma requisição PO
 @Post
 public void create(Contato contato){
 	//Cadastra contato
-	System.out.println(contato);
 }
 ```
 Seguindo essa logica, o VRaptor também nos fornece a anotação @Get, assim podemos anotar nosso meotod "form" para responder apenas a requisições GET
@@ -244,10 +243,54 @@ public void redirect(Result result){
 public void form(){
 }
 ```
-Veja que uma das grandes diferenças é que o forward não altera a URI da pagina, já o redirect altera
+Veja que uma das grandes diferenças é que o forward não altera a URI da pagina, já o redirect altera, vale salientar
+que o redirect acaba fazendo 2 requisições, uma com a resposta 302 (Movido temporariamente) e com o link para o qual 
+o cliente ira acessar o recurso, so então o browser faz a requisição para o link correto.
 
+### Validando
 
+O VRaptor possui um Helper para simplificar as validações no lado servidor, o nome desse Helper é Validator
+com ele podemos tanto executar as validações, como definir uma ação padrão que será executada em caso de falaha na validação, veja:
 
+```java
+@Post
+public void create(Contato contato , Validator validator){
+	validator.addIf( contato.getNome() == null, new SimpleMessage("contato.nome", "é de preenchimento obrigatório"));
+	validator.onErrorForwardTo(this).form();
+	//Cadastra contato
+}
+``` 
+
+No metodo addIf, da classe Validator, ira fazer a checagem proposta, e caso ela retorne verdadeiro ira a dicionar uma mensagem contendo o campo que estou validadno e a mensagem de erro da validação, em seguida temos o onErrorForwardTo
+que irá sinalizar que ação devo tomar caso aconteça algum error, se ouver algum erro de validação essa linha ira bloquear o restante da execução, caso não possua nenhum erro de vaidação a instrução simplesmente será ignorada.
+
+Porem em uma entidade mais complexa, pode ser um tanto quanto penoso adicionar cada validação para cada campo, uma possibilidade é criar uma classes especifica responsavel apenas pela validação, a outra é usar a especificação (JSR 303) Bean Validation
+
+### Validação com Bean Validation
+
+O VRaptor já vem com o suporte a especificação 303 Bean Validation, mas é necessário adicionar um arquivo de configuração, o validation.xml, ver instruções no inicio deste arquivo.
+ 
+Com o arquivo de configuração no seu devido local, devemos preparar nossa entidade com as validações desejadas
+
+```java
+public class Contato{
+	@NotEmpty
+	private String nome;
+	private String telefone;
+	private String celular;
+	//Gets and Sets
+}
+```
+Com a anotação @NotEmpty, sinaliso que o meu atributo nome, não deve ser nulo nem vazio, 
+
+```java
+@Post
+public void create(@Valid Contato contato , Validator validator){
+	validator.onErrorForwardTo(this).form();
+	//Cadastra contato
+}
+``` 
+E no metodo do controller anoto o parametro que desejo validar com a anotação @Valid, com isso o vraptor vai se encarregar de realizar as validações junto com o bean validation.
 
 
 

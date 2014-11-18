@@ -1,7 +1,7 @@
 Agenda Siconect
-========
+==============
 
-Projeto usado no workshop de Introdução ao VRaptor 4, ministrado no evento SICONECT, nos dias 10 e 11 de novembro de 2014 - Estácio FIC - Fortaleza/CE
+Projeto usado no workshop de Introdução ao VRaptor 4, ministrado no evento SICONECT 2014 - Estácio FIC - Fortaleza/CE
 
 ## VRaptor
 
